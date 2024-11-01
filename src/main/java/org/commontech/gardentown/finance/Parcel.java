@@ -19,4 +19,12 @@ record Parcel(List<SubAccount> subAccounts) {
         }
         return subAccount;
     }
+
+    public BigDecimal sum() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (SubAccount subAccount : subAccounts) {
+            total = total.add(subAccount.amount);
+        }
+        return total;
+    }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bilans</title>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+
+Bilans
+
+<table style="border: ">
+    <tr>
+        <th th:each="subAccount: ${parcel.subAccounts}" th:text="${subAccount.type}"></th>
+        <th>Suma</th>
+    </tr>
+    <tr>
+        <td th:each="subAccount: ${parcel.subAccounts}" th:text="${subAccount.amount}"></td>
+        <td th:text="${parcel.sum}"></td>
+    </tr>
+</table>
+
+</body>
+</html>
