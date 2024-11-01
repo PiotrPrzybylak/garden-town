@@ -16,7 +16,7 @@ class ParcelTest {
 
         List<Event> history = parcel.history();
 
-        assertThat(history).containsExactly(new Event(Event.Type.START,
+        assertThat(history).containsExactly(new Event(Event.Type.START, LocalDate.parse("2024-01-01"),
                 new Balance(List.of(
                         new SubAccount(SubAccountType.MEMBERSHIP, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.GARDEN, BigDecimal.ZERO),

@@ -50,6 +50,6 @@ class Parcel {
     }
 
     public List<Event> history() {
-        return List.of(new Event(START, new Balance(Arrays.stream(SubAccountType.values()).map((t) -> new SubAccount(t, BigDecimal.ZERO)).toList())));
+        return List.of(new Event(START, start, new Balance(Arrays.stream(SubAccountType.values()).map((t) -> new SubAccount(t, BigDecimal.ZERO)).toList())));
     }
 }
