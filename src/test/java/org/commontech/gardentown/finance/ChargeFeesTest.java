@@ -19,8 +19,13 @@ public class ChargeFeesTest {
         }
 
         assertThat(parcel.subAccounts()).containsExactly(
+                new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("-1.23")),
                 new SubAccount(SubAccountType.GARDEN, new BigDecimal("-1.23")),
-                new SubAccount(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("-1.23"))
+                new SubAccount(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("-1.23")),
+                new SubAccount(SubAccountType.ELECTRICITY_LOSS, new BigDecimal("-1.23")),
+                new SubAccount(SubAccountType.WATER_USAGE, new BigDecimal("-1.23")),
+                new SubAccount(SubAccountType.WATER_LOSS, new BigDecimal("-1.23")),
+                new SubAccount(SubAccountType.TRASH, new BigDecimal("-1.23"))
         );
 
     }
