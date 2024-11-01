@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 class GardenTownApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GardenTownApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(GardenTownApplication.class, args);
+    }
 
 }

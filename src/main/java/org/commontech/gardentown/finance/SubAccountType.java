@@ -1,5 +1,5 @@
 package org.commontech.gardentown.finance;
 
 enum SubAccountType {
-    ELECTRICITY, GARDEN_BASIC_CHARGE
+    GARDEN_BASIC_CHARGE, ELECTRICITY
 }
