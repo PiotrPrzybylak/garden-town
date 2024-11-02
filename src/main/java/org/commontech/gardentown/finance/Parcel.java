@@ -7,12 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.commontech.gardentown.finance.Event.Type.FEES;
 import static org.commontech.gardentown.finance.Event.Type.START;
 
 class Parcel {
 
     private LocalDate start;
     private List<SubAccount> subAccounts = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
 
 
     public Parcel(List<SubAccount> subAccounts) {
@@ -21,6 +23,14 @@ class Parcel {
 
     public Parcel(LocalDate start) {
         this.start = start;
+        for (SubAccountType type : SubAccountType.values()) {
+            subAccounts.add( new SubAccount(type, BigDecimal.ZERO));
+        }
+        events.add(new Event(START, start, getBalance()));
+    }
+
+    private Balance getBalance() {
+        return new Balance(subAccounts.stream().map((s) -> new SubAccount(s.getType(), s.getAmount())).toList());
     }
 
     public void chargeFee(SubAccountType subAccountType, BigDecimal amount) {
@@ -50,6 +60,15 @@ class Parcel {
     }
 
     public List<Event> history() {
-        return List.of(new Event(START, start, new Balance(Arrays.stream(SubAccountType.values()).map((t) -> new SubAccount(t, BigDecimal.ZERO)).toList())));
+        return events;
+    }
+
+    public void chargeFees(LocalDate date, Fees fees) {
+        Arrays.stream(fees.fees()).forEach(this::chargeFee);
+        events.add(new Event(FEES, date, getBalance()));
+    }
+
+    private void chargeFee(Fee fee) {
+        chargeFee(fee.subAccountType(), fee.amount());
     }
 }
