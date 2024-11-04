@@ -12,18 +12,21 @@
 </head>
 <body>
 
+<div th:each="event: ${parcel.events}">
+    <p th:text="${event.date}"></p>
+    Typ zdarzenia: <p th:text="${event.type}"></p>
 Bilans
 
 <table style="border: ">
     <tr>
-        <th th:each="subAccount: ${parcel.subAccounts}" th:text="${subAccount.type}"></th>
+        <th th:each="subAccount: ${event.balance.subAccounts}" th:text="${subAccount.type}"></th>
         <th>Suma</th>
     </tr>
     <tr>
-        <td th:each="subAccount: ${parcel.subAccounts}" th:text="${subAccount.amount}"></td>
-        <td th:text="${parcel.sum}"></td>
+        <td th:each="subAccount: ${event.balance.subAccounts}" th:text="${subAccount.amount}"></td>
+        <td th:text="${event.balance.sum}"></td>
     </tr>
 </table>
-
+</div>
 </body>
 </html>

@@ -18,4 +18,8 @@ class SubAccount {
     public void chargeFee(BigDecimal amount) {
         this.amount = this.amount.subtract(amount);
     }
+
+    public void addPayment(BigDecimal amount) {
+        this.amount = this.amount.add(amount);
+    }
 }

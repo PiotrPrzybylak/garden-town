@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.commontech.gardentown.finance.Event.Type.FEES;
+import static org.commontech.gardentown.finance.Event.Type.PAYMENT;
 import static org.commontech.gardentown.finance.Event.Type.START;
 
 class Parcel {
@@ -24,7 +25,7 @@ class Parcel {
     public Parcel(LocalDate start) {
         this.start = start;
         for (SubAccountType type : SubAccountType.values()) {
-            subAccounts.add( new SubAccount(type, BigDecimal.ZERO));
+            subAccounts.add(new SubAccount(type, BigDecimal.ZERO));
         }
         events.add(new Event(START, start, getBalance()));
     }
@@ -70,5 +71,18 @@ class Parcel {
 
     private void chargeFee(Fee fee) {
         chargeFee(fee.subAccountType(), fee.amount());
+    }
+
+    public void addPayment(LocalDate date, Payment payment) {
+        payment.proposeBooking(this).subPayments.forEach(this::addSubPayment);
+        events.add(new Event(PAYMENT, date, getBalance()));
+    }
+
+    private void addSubPayment(SubPayment subPayment) {
+        getSubAccount(subPayment.type()).addPayment(subPayment.amount());
+    }
+
+    public List<Event> getEvents() {
+        return events;
     }
 }
