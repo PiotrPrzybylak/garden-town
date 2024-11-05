@@ -23,6 +23,7 @@ record Payment(BigDecimal amount) {
 
             }
         }
+        bookingProposal.excess = total;
         return bookingProposal;
     }
 }

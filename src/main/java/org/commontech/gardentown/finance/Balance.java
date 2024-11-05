@@ -3,7 +3,7 @@ package org.commontech.gardentown.finance;
 import java.math.BigDecimal;
 import java.util.List;
 
-record Balance(List<SubAccount> subAccounts) {
+record Balance(List<SubAccount> subAccounts, BigDecimal excess) {
 
 
     public BigDecimal sum() {
@@ -11,7 +11,7 @@ record Balance(List<SubAccount> subAccounts) {
         for (SubAccount subAccount : subAccounts) {
             total = total.add(subAccount.amount);
         }
-        return total;
+        return total.add(excess);
     }
 
 }

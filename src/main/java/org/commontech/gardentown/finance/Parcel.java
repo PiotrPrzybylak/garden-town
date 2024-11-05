@@ -16,6 +16,7 @@ class Parcel {
     private LocalDate start;
     private List<SubAccount> subAccounts = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
+    BigDecimal excessPayment = BigDecimal.ZERO;
 
 
     public Parcel(List<SubAccount> subAccounts) {
@@ -31,7 +32,7 @@ class Parcel {
     }
 
     private Balance getBalance() {
-        return new Balance(subAccounts.stream().map((s) -> new SubAccount(s.getType(), s.getAmount())).toList());
+        return new Balance(subAccounts.stream().map((s) -> new SubAccount(s.getType(), s.getAmount())).toList(), excessPayment);
     }
 
     public void chargeFee(SubAccountType subAccountType, BigDecimal amount) {
@@ -74,7 +75,9 @@ class Parcel {
     }
 
     public void addPayment(LocalDate date, Payment payment) {
-        payment.proposeBooking(this).subPayments.forEach(this::addSubPayment);
+        BookingProposal bookingProposal = payment.proposeBooking(this);
+        bookingProposal.subPayments.forEach(this::addSubPayment);
+        excessPayment = excessPayment.add(bookingProposal.excess);
         events.add(new Event(PAYMENT, date, getBalance()));
     }
 
