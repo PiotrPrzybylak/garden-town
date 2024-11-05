@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import static org.commontech.gardentown.finance.Event.Type.FEES;
 import static org.commontech.gardentown.finance.Event.Type.PAYMENT;
+import static org.commontech.gardentown.finance.Event.Type.REBALANCE;
 import static org.commontech.gardentown.finance.Event.Type.START;
 
 class Parcel {
@@ -68,6 +69,13 @@ class Parcel {
     public void chargeFees(LocalDate date, Fees fees) {
         Arrays.stream(fees.fees()).forEach(this::chargeFee);
         events.add(new Event(FEES, date, getBalance()));
+        if (excessPayment.compareTo(BigDecimal.ZERO) > 0) {
+            BookingProposal bookingProposal = new Payment(excessPayment).proposeBooking(this);
+            bookingProposal.subPayments.forEach(this::addSubPayment);
+            excessPayment = bookingProposal.excess;
+            events.add(new Event(REBALANCE, date, getBalance()));
+
+        }
     }
 
     private void chargeFee(Fee fee) {

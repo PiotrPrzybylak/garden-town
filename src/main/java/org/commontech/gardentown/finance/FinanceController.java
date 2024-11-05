@@ -29,6 +29,11 @@ class FinanceController {
         parcel.addPayment(LocalDate.parse("2024-03-18"), new Payment(new BigDecimal("100")));
         parcel.chargeFees(LocalDate.parse("2024-07-01"), new Fees(new Fee(SubAccountType.TRASH, new BigDecimal("175"))));
         parcel.addPayment(LocalDate.parse("2024-07-18"), new Payment(new BigDecimal("100")));
+        parcel.chargeFees(LocalDate.parse("2024-07-01"), new Fees(
+                new Fee(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("30")),
+                new Fee(SubAccountType.WATER_USAGE, new BigDecimal("10.51"))
+        ));
+
 
         model.addAttribute("parcel", parcel);
 
