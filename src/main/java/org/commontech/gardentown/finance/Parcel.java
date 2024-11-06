@@ -29,7 +29,7 @@ class Parcel {
         for (SubAccountType type : SubAccountType.values()) {
             subAccounts.add(new SubAccount(type, BigDecimal.ZERO));
         }
-        events.add(new Event(START, start, getBalance()));
+        events.add(new Event(START, start, new Start(), getBalance()));
     }
 
     private Balance getBalance() {
@@ -68,12 +68,12 @@ class Parcel {
 
     public void chargeFees(LocalDate date, Fees fees) {
         Arrays.stream(fees.fees()).forEach(this::chargeFee);
-        events.add(new Event(FEES, date, getBalance()));
+        events.add(new Event(FEES, date, new FeesCharged(), getBalance()));
         if (excessPayment.compareTo(BigDecimal.ZERO) > 0) {
             BookingProposal bookingProposal = new Payment(excessPayment).proposeBooking(this);
             bookingProposal.subPayments.forEach(this::addSubPayment);
             excessPayment = bookingProposal.excess;
-            events.add(new Event(REBALANCE, date, getBalance()));
+            events.add(new Event(REBALANCE, date, new RebalanceOperation(), getBalance()));
 
         }
     }
@@ -86,7 +86,7 @@ class Parcel {
         BookingProposal bookingProposal = payment.proposeBooking(this);
         bookingProposal.subPayments.forEach(this::addSubPayment);
         excessPayment = excessPayment.add(bookingProposal.excess);
-        events.add(new Event(PAYMENT, date, getBalance()));
+        events.add(new Event(PAYMENT, date, new PaymentOperation(payment), getBalance()));
     }
 
     private void addSubPayment(SubPayment subPayment) {

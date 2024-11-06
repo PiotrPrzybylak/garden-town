@@ -16,10 +16,12 @@
 <table style="border: ">
     <tr>
         <th rowspan="2">Data</th>
-        <th rowspan="2">Zdarzenie</th>
+        <th colspan="2">Zdarzenie</th>
         <th th:colspan="${subaccounts.length + 2}">Bilans</th>
     </tr>
     <tr>
+        <th>Rodzaj</th>
+        <th>Szczegóły</th>
         <th th:each="type: ${subaccounts}" th:text="${type}"></th>
         <th>Nadpłata</th>
         <th>Suma</th>
@@ -27,6 +29,7 @@
     <tr th:each="event: ${parcel.events}">
         <td th:text="${event.date}"></td>
         <td th:text="${event.type}"></td>
+        <td th:text="${event.operation}"></td>
         <td th:each="subAccount: ${event.balance.subAccounts}" th:text="${subAccount.amount}"></td>
         <td th:text="${event.balance.excess}"></td>
         <td th:text="${event.balance.sum}"></td>

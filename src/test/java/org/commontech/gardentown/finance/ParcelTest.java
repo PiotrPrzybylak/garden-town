@@ -16,7 +16,7 @@ class ParcelTest {
 
         List<Event> history = parcel.history();
 
-        assertThat(history).containsExactly(new Event(Event.Type.START, LocalDate.parse("2024-01-01"),
+        assertThat(history).containsExactly(new Event(Event.Type.START, LocalDate.parse("2024-01-01"), new Start(),
                 new Balance(List.of(
                         new SubAccount(SubAccountType.MEMBERSHIP, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.GARDEN, BigDecimal.ZERO),
@@ -55,7 +55,7 @@ class ParcelTest {
         System.out.println(history);
 
         assertThat(history).containsExactly(
-                new Event(Event.Type.START, LocalDate.parse("2024-01-01"),
+                new Event(Event.Type.START, LocalDate.parse("2024-01-01"), new Start(),
                         new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, BigDecimal.ZERO),
                                 new SubAccount(SubAccountType.GARDEN, BigDecimal.ZERO),
@@ -69,7 +69,7 @@ class ParcelTest {
                                 BigDecimal.ZERO
                         )
                 ),
-                new Event(Event.Type.FEES, LocalDate.parse("2024-01-02"),
+                new Event(Event.Type.FEES, LocalDate.parse("2024-01-02"), new FeesCharged(),
                         new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("-6")),
                                 new SubAccount(SubAccountType.GARDEN, new BigDecimal("-255")),
@@ -111,7 +111,7 @@ class ParcelTest {
         System.out.println(history);
 
         assertThat(history).containsExactly(
-                new Event(Event.Type.START, LocalDate.parse("2024-01-01"),
+                new Event(Event.Type.START, LocalDate.parse("2024-01-01"), new Start(),
                         new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, BigDecimal.ZERO),
                                 new SubAccount(SubAccountType.GARDEN, BigDecimal.ZERO),
@@ -125,7 +125,7 @@ class ParcelTest {
                                 BigDecimal.ZERO
                         )
                 ),
-                new Event(Event.Type.FEES, LocalDate.parse("2024-01-02"),
+                new Event(Event.Type.FEES, LocalDate.parse("2024-01-02"), new FeesCharged(),
                         new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("-6")),
                                 new SubAccount(SubAccountType.GARDEN, new BigDecimal("-255")),
@@ -139,7 +139,7 @@ class ParcelTest {
                                 BigDecimal.ZERO
                         )
                 ),
-                new Event(Event.Type.PAYMENT, LocalDate.parse("2024-01-03"),
+                new Event(Event.Type.PAYMENT, LocalDate.parse("2024-01-03"), new PaymentOperation(new Payment(new BigDecimal("100"))),
                         new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("0")),
                                 new SubAccount(SubAccountType.GARDEN, new BigDecimal("-161")),
