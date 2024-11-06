@@ -70,12 +70,15 @@ class Parcel {
         Arrays.stream(fees.fees()).forEach(this::chargeFee);
         events.add(new Event(FEES, date, new FeesCharged(), getBalance()));
         if (excessPayment.compareTo(BigDecimal.ZERO) > 0) {
-            BookingProposal bookingProposal = new Payment(excessPayment).proposeBooking(this);
-            bookingProposal.subPayments.forEach(this::addSubPayment);
-            excessPayment = bookingProposal.excess;
-            events.add(new Event(REBALANCE, date, new RebalanceOperation(), getBalance()));
-
+            rebalance(date);
         }
+    }
+
+    private void rebalance(LocalDate date) {
+        BookingProposal bookingProposal = new Payment(excessPayment).proposeBooking(this);
+        bookingProposal.subPayments.forEach(this::addSubPayment);
+        excessPayment = bookingProposal.excess;
+        events.add(new Event(REBALANCE, date, new RebalanceOperation(), getBalance()));
     }
 
     private void chargeFee(Fee fee) {
@@ -83,10 +86,9 @@ class Parcel {
     }
 
     public void addPayment(LocalDate date, Payment payment) {
-        BookingProposal bookingProposal = payment.proposeBooking(this);
-        bookingProposal.subPayments.forEach(this::addSubPayment);
-        excessPayment = excessPayment.add(bookingProposal.excess);
+        excessPayment = excessPayment.add(payment.amount());
         events.add(new Event(PAYMENT, date, new PaymentOperation(payment), getBalance()));
+        rebalance(date);
     }
 
     private void addSubPayment(SubPayment subPayment) {

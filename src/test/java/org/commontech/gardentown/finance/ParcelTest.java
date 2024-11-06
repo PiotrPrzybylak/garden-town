@@ -141,6 +141,20 @@ class ParcelTest {
                 ),
                 new Event(Event.Type.PAYMENT, LocalDate.parse("2024-01-03"), new PaymentOperation(new Payment(new BigDecimal("100"))),
                         new Balance(List.of(
+                                new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("-6")),
+                                new SubAccount(SubAccountType.GARDEN, new BigDecimal("-255")),
+                                new SubAccount(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("0")),
+                                new SubAccount(SubAccountType.ELECTRICITY_LOSS, new BigDecimal("-30")),
+                                new SubAccount(SubAccountType.WATER_USAGE, new BigDecimal("0")),
+                                new SubAccount(SubAccountType.WATER_LOSS, new BigDecimal("-25")),
+                                new SubAccount(SubAccountType.TRASH, new BigDecimal("-350")),
+                                new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
+                        ),
+                                new BigDecimal("100")
+                        )
+                ),
+                new Event(Event.Type.REBALANCE, LocalDate.parse("2024-01-03"), new RebalanceOperation(),
+                        new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("0")),
                                 new SubAccount(SubAccountType.GARDEN, new BigDecimal("-161")),
                                 new SubAccount(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("0")),
