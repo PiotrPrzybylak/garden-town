@@ -24,8 +24,12 @@ class ParcelTest {
                         new SubAccount(SubAccountType.ELECTRICITY_LOSS, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.WATER_USAGE, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.WATER_LOSS, BigDecimal.ZERO),
-                        new SubAccount(SubAccountType.TRASH, BigDecimal.ZERO)
-                ))));
+                        new SubAccount(SubAccountType.TRASH, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
+                ),
+                        BigDecimal.ZERO
+                )
+        ));
     }
 
 
@@ -41,8 +45,8 @@ class ParcelTest {
                 new Fee(SubAccountType.WATER_USAGE, new BigDecimal("0")),
                 new Fee(SubAccountType.ELECTRICITY_LOSS, new BigDecimal("30")),
                 new Fee(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("0")),
+                new Fee(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("0")),
                 new Fee(SubAccountType.TRASH, new BigDecimal("350"))
-
         );
         parcel.chargeFees(LocalDate.parse("2024-01-02"), fees);
 
@@ -59,8 +63,12 @@ class ParcelTest {
                                 new SubAccount(SubAccountType.ELECTRICITY_LOSS, BigDecimal.ZERO),
                                 new SubAccount(SubAccountType.WATER_USAGE, BigDecimal.ZERO),
                                 new SubAccount(SubAccountType.WATER_LOSS, BigDecimal.ZERO),
-                                new SubAccount(SubAccountType.TRASH, BigDecimal.ZERO)
-                        ))),
+                                new SubAccount(SubAccountType.TRASH, BigDecimal.ZERO),
+                                new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
+                        ),
+                                BigDecimal.ZERO
+                        )
+                ),
                 new Event(Event.Type.FEES, LocalDate.parse("2024-01-02"),
                         new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("-6")),
@@ -69,8 +77,12 @@ class ParcelTest {
                                 new SubAccount(SubAccountType.ELECTRICITY_LOSS, new BigDecimal("-30")),
                                 new SubAccount(SubAccountType.WATER_USAGE, new BigDecimal("0")),
                                 new SubAccount(SubAccountType.WATER_LOSS, new BigDecimal("-25")),
-                                new SubAccount(SubAccountType.TRASH, new BigDecimal("-350"))
-                        )))
+                                new SubAccount(SubAccountType.TRASH, new BigDecimal("-350")),
+                                new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
+                        ),
+                                BigDecimal.ZERO
+                        )
+                )
         );
     }
 
@@ -92,7 +104,7 @@ class ParcelTest {
         );
         parcel.chargeFees(LocalDate.parse("2024-01-02"), fees);
 
-        parcel.addPayment(LocalDate.parse("2024-01-02"), new Payment(new BigDecimal("100")));
+        parcel.addPayment(LocalDate.parse("2024-01-03"), new Payment(new BigDecimal("100")));
 
         List<Event> history = parcel.history();
 
@@ -107,8 +119,12 @@ class ParcelTest {
                                 new SubAccount(SubAccountType.ELECTRICITY_LOSS, BigDecimal.ZERO),
                                 new SubAccount(SubAccountType.WATER_USAGE, BigDecimal.ZERO),
                                 new SubAccount(SubAccountType.WATER_LOSS, BigDecimal.ZERO),
-                                new SubAccount(SubAccountType.TRASH, BigDecimal.ZERO)
-                        ))),
+                                new SubAccount(SubAccountType.TRASH, BigDecimal.ZERO),
+                                new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
+                        ),
+                                BigDecimal.ZERO
+                        )
+                ),
                 new Event(Event.Type.FEES, LocalDate.parse("2024-01-02"),
                         new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("-6")),
@@ -117,8 +133,12 @@ class ParcelTest {
                                 new SubAccount(SubAccountType.ELECTRICITY_LOSS, new BigDecimal("-30")),
                                 new SubAccount(SubAccountType.WATER_USAGE, new BigDecimal("0")),
                                 new SubAccount(SubAccountType.WATER_LOSS, new BigDecimal("-25")),
-                                new SubAccount(SubAccountType.TRASH, new BigDecimal("-350"))
-                        ))),
+                                new SubAccount(SubAccountType.TRASH, new BigDecimal("-350")),
+                                new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
+                        ),
+                                BigDecimal.ZERO
+                        )
+                ),
                 new Event(Event.Type.PAYMENT, LocalDate.parse("2024-01-03"),
                         new Balance(List.of(
                                 new SubAccount(SubAccountType.MEMBERSHIP, new BigDecimal("0")),
@@ -127,8 +147,12 @@ class ParcelTest {
                                 new SubAccount(SubAccountType.ELECTRICITY_LOSS, new BigDecimal("-30")),
                                 new SubAccount(SubAccountType.WATER_USAGE, new BigDecimal("0")),
                                 new SubAccount(SubAccountType.WATER_LOSS, new BigDecimal("-25")),
-                                new SubAccount(SubAccountType.TRASH, new BigDecimal("-350"))
-                        )))
+                                new SubAccount(SubAccountType.TRASH, new BigDecimal("-350")),
+                                new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
+                        ),
+                                BigDecimal.ZERO
+                        )
+                )
         );
     }
 }
