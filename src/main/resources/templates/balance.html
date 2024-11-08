@@ -26,12 +26,10 @@
 <table style="border: ">
     <tr>
         <th rowspan="2" th:text="#{page.text.date}">Date</th>
-        <th colspan="2" th:text="#{page.text.event}">Event</th>
+        <th rowspan="2" th:text="#{page.text.event}">Event</th>
         <th th:colspan="${subaccounts.length + 2}" th:text="#{page.text.balance}">Balance</th>
     </tr>
     <tr>
-        <th th:text="#{page.text.type}">Type</th>
-        <th th:text="#{page.text.details}">Details</th>
         <th th:each="type: ${subaccounts}" th:text="#{subaccount.name.__${type}__}"></th>
         <th th:text="#{page.text.excess}">Excess</th>
         <th th:text="#{page.text.sum}">Sum</th>
@@ -40,7 +38,6 @@
     <tr th:if="${event.previous}">
         <td th:text="${event.date}"></td>
         <td th:text="#{event.type.__${event.type}__}"></td>
-        <td></td>
         <td th:each="subAccount: ${event.diff.subAccounts}" th:text="${subAccount.amount}"
             th:attr="class=${subAccount.amount == 0 ? 'neutral' : subAccount.amount > 0 ? 'positive' : 'negative'}"></td>
         <td th:text="${event.diff.excess}"
@@ -49,9 +46,7 @@
             th:attr="class=${event.diff.sum == 0 ? 'neutral' : event.diff.sum > 0 ? 'positive' : 'negative'}"></td>
     </tr>
     <tr style="background-color:#e9f7f6">
-        <td></td>
-        <td th:text="#{page.text.balance}">Balance</td>
-        <td></td>
+        <td th:text="#{page.text.balance}" colspan="2">Balance</td>
         <td th:each="subAccount: ${event.balance.subAccounts}" th:text="${subAccount.amount}"></td>
         <td th:text="${event.balance.excess}"></td>
         <td th:text="${event.balance.sum}"></td>
