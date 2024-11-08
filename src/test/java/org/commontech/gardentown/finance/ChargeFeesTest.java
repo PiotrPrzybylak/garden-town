@@ -13,7 +13,7 @@ public class ChargeFeesTest {
     @Test
     void chargingFees() {
 
-        Parcel parcel = new Parcel(new ArrayList<>());
+        Parcel parcel = new Parcel(LocalDate.parse("2024-01-01"));
 
         parcel.chargeFees(LocalDate.parse("2024-01-02"), new Fees(
                 new Fee(SubAccountType.MEMBERSHIP, new BigDecimal("1.23")),
@@ -32,7 +32,8 @@ public class ChargeFeesTest {
                 new SubAccount(SubAccountType.ELECTRICITY_LOSS, new BigDecimal("-1.23")),
                 new SubAccount(SubAccountType.WATER_USAGE, new BigDecimal("-1.23")),
                 new SubAccount(SubAccountType.WATER_LOSS, new BigDecimal("-1.23")),
-                new SubAccount(SubAccountType.TRASH, new BigDecimal("-1.23"))
+                new SubAccount(SubAccountType.TRASH, new BigDecimal("-1.23")),
+                new SubAccount(SubAccountType.OTHER, new BigDecimal("0"))
         );
 
     }
