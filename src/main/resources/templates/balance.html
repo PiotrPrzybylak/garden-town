@@ -39,7 +39,7 @@
     <tbody th:each="event: ${parcel.events}">
     <tr th:if="${event.previous}">
         <td th:text="${event.date}"></td>
-        <td th:text="${event.type}"></td>
+        <td th:text="#{event.type.__${event.type}__}"></td>
         <td></td>
         <td th:each="subAccount: ${event.diff.subAccounts}" th:text="${subAccount.amount}"
             th:attr="class=${subAccount.amount == 0 ? 'neutral' : subAccount.amount > 0 ? 'positive' : 'negative'}"></td>
