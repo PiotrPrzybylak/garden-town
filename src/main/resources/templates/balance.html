@@ -38,7 +38,7 @@
     <tr th:if="${event.previous}">
         <td th:text="${event.date}"></td>
         <td th:text="#{event.type.__${event.type}__}"></td>
-        <td th:each="subAccount: ${event.diff.subAccounts}" th:text="${subAccount.amount}"
+        <td th:each="subAccount: ${event.diff.subAccounts}" th:text="${subAccount.amount == 0 ? '' : subAccount.amount}"
             th:attr="class=${subAccount.amount == 0 ? 'neutral' : subAccount.amount > 0 ? 'positive' : 'negative'}"></td>
         <td th:text="${event.diff.excess}"
             th:attr="class=${event.diff.excess == 0 ? 'neutral' :event.diff.excess > 0 ? 'positive' : 'negative'}"></td>
