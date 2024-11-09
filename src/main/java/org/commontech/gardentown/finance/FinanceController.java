@@ -18,11 +18,8 @@ class FinanceController {
         garden.getParcels().add(new Parcel("I-1", LocalDate.now(), 200));
         garden.getParcels().add(new Parcel("I-2", LocalDate.now(), 255));
         garden.getParcels().add(new Parcel("IV-5a", LocalDate.now(), 302));
-    }
 
-    @GetMapping("/")
-    String showBalance(Model model) {
-        Parcel parcel = new Parcel("I/1", LocalDate.parse("2024-01-01"), 255);
+        Parcel parcel = new Parcel("II-111", LocalDate.parse("2024-01-01"), 255);
         parcel.chargeFees(LocalDate.parse("2024-01-02"), new Fees(
                 new Fee(SubAccountType.MEMBERSHIP, new BigDecimal("6")),
                 new Fee(SubAccountType.GARDEN, new BigDecimal("255")),
@@ -43,8 +40,12 @@ class FinanceController {
                 new Fee(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("30")),
                 new Fee(SubAccountType.WATER_USAGE, new BigDecimal("10.51"))
         ));
+        garden.getParcels().add(parcel);
+    }
 
-
+    @GetMapping("/")
+    String showBalance(Model model) {
+        Parcel parcel = getParcelById("II-111");
         model.addAttribute("parcel", parcel);
         model.addAttribute("subaccounts", SubAccountType.values());
 
