@@ -3,6 +3,7 @@ package org.commontech.gardentown.finance;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,9 +14,9 @@ class FinanceController {
     private final Garden garden = new Garden();
 
     FinanceController() {
-        garden.getParcels().add(new Parcel("I/1", LocalDate.now(), 200));
-        garden.getParcels().add(new Parcel("I/2", LocalDate.now(), 255));
-        garden.getParcels().add(new Parcel("IV/5a", LocalDate.now(), 302));
+        garden.getParcels().add(new Parcel("I-1", LocalDate.now(), 200));
+        garden.getParcels().add(new Parcel("I-2", LocalDate.now(), 255));
+        garden.getParcels().add(new Parcel("IV-5a", LocalDate.now(), 302));
     }
 
     @GetMapping("/")
@@ -44,7 +45,6 @@ class FinanceController {
 
 
         model.addAttribute("parcel", parcel);
-
         model.addAttribute("subaccounts", SubAccountType.values());
 
         return "balance";
@@ -55,6 +55,21 @@ class FinanceController {
     String parcels(Model model) {
         model.addAttribute("parcels", garden.getParcels());
         return "parcels";
+    }
+
+    @GetMapping("/parcels/{id}")
+    String parcel(@PathVariable String id, Model model) {
+        Parcel parcel = getParcelById(id);
+        model.addAttribute("parcel", parcel);
+        model.addAttribute("subaccounts", SubAccountType.values());
+        return "balance";
+    }
+
+    private Parcel getParcelById(String id) {
+        for (Parcel parcel : garden.getParcels()) {
+            if (parcel.id.equals(id)) return parcel;
+        }
+        return null;
     }
 
 }

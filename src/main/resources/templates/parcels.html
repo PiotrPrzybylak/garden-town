@@ -31,7 +31,7 @@
     </tr>
     <tbody th:each="parcel: ${parcels}">
     <tr>
-        <td th:text="${parcel.id}"></td>
+        <td><a th:text="${parcel.id}" th:href="${'/parcels/' + parcel.id}"></a></td>
         <td th:text="${parcel.size}"></td>
         <td th:text="${parcel.balance.sum}"></td>
     </tr>
