@@ -85,9 +85,12 @@ class Parcel {
     }
 
     public void addPayment(LocalDate date, Payment payment) {
+        boolean needsPayments = sum().compareTo(BigDecimal.ZERO) < 0;
         excessPayment = excessPayment.add(payment.amount());
         events.add(new Event(PAYMENT, date, new PaymentOperation(payment), getBalance(), events.getLast()));
-        rebalance(date);
+        if (needsPayments) {
+            rebalance(date);
+        }
     }
 
     private void addSubPayment(SubPayment subPayment) {
