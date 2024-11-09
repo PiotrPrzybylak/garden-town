@@ -10,9 +10,17 @@ import java.time.LocalDate;
 @Controller
 class FinanceController {
 
+    private final Garden garden = new Garden();
+
+    FinanceController() {
+        garden.getParcels().add(new Parcel("I/1", LocalDate.now(), 200));
+        garden.getParcels().add(new Parcel("I/2", LocalDate.now(), 255));
+        garden.getParcels().add(new Parcel("IV/5a", LocalDate.now(), 302));
+    }
+
     @GetMapping("/")
     String showBalance(Model model) {
-        Parcel parcel = new Parcel(LocalDate.parse("2024-01-01"));
+        Parcel parcel = new Parcel("I/1", LocalDate.parse("2024-01-01"), 255);
         parcel.chargeFees(LocalDate.parse("2024-01-02"), new Fees(
                 new Fee(SubAccountType.MEMBERSHIP, new BigDecimal("6")),
                 new Fee(SubAccountType.GARDEN, new BigDecimal("255")),
@@ -40,6 +48,13 @@ class FinanceController {
         model.addAttribute("subaccounts", SubAccountType.values());
 
         return "balance";
+    }
+
+
+    @GetMapping("/parcels")
+    String parcels(Model model) {
+        model.addAttribute("parcels", garden.getParcels());
+        return "parcels";
     }
 
 }

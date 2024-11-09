@@ -13,7 +13,7 @@ public class ChargeFeesTest {
     @Test
     void chargingFees() {
 
-        Parcel parcel = new Parcel(LocalDate.parse("2024-01-01"));
+        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
 
         parcel.chargeFees(LocalDate.parse("2024-01-02"), new Fees(
                 new Fee(SubAccountType.MEMBERSHIP, new BigDecimal("1.23")),

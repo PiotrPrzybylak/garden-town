@@ -12,7 +12,7 @@ class PaymentTest {
 
     @Test
     void shouldCoverNegativeBalance() {
-        Parcel parcel = new Parcel(LocalDate.now());
+        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
         parcel.chargeFees(LocalDate.now(), new Fees(new Fee(SubAccountType.GARDEN, new BigDecimal("80"))));
         Payment payment = new Payment(new BigDecimal("100.00"));
 
@@ -29,7 +29,7 @@ class PaymentTest {
     void shouldCoverNegativeBalanceUpToTotalPaymentAmount() {
 
 
-        Parcel parcel = new Parcel(LocalDate.now());
+        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
         parcel.chargeFees(LocalDate.now(), new Fees(
                 new Fee(SubAccountType.GARDEN, new BigDecimal("80")),
                 new Fee(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("80"))

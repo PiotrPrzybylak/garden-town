@@ -18,16 +18,20 @@ class Parcel {
     private List<SubAccount> subAccounts = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
     BigDecimal excessPayment = BigDecimal.ZERO;
+    public String id;
+    public int size;
 
-    public Parcel(LocalDate start) {
+    public Parcel(String id, LocalDate start, int size) {
+        this.id = id;
         this.start = start;
+        this.size = size;
         for (SubAccountType type : SubAccountType.values()) {
             subAccounts.add(new SubAccount(type, BigDecimal.ZERO));
         }
         events.add(new Event(START, start, new Start(), getBalance(), null));
     }
 
-    private Balance getBalance() {
+    public Balance getBalance() {
         return new Balance(subAccounts.stream().map((s) -> new SubAccount(s.getType(), s.getAmount())).toList(), excessPayment);
     }
 

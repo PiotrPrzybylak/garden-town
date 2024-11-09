@@ -12,7 +12,7 @@ class ParcelTest {
 
     @Test
     void test() {
-        Parcel parcel = new Parcel(LocalDate.parse("2024-01-01"));
+        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
 
         List<Event> history = parcel.history();
 
@@ -36,7 +36,7 @@ class ParcelTest {
 
     @Test
     void test2() {
-        Parcel parcel = new Parcel(LocalDate.parse("2024-01-01"));
+        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
 
         Fees fees = new Fees(
 
@@ -94,7 +94,7 @@ class ParcelTest {
 
     @Test
     void test3() {
-        Parcel parcel = new Parcel(LocalDate.parse("2024-01-01"));
+        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
 
         Fees fees = new Fees(
 

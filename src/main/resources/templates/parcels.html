@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{page.text.balance}">Balance</title>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+          padding: 3px;
+        }
+        .negative {
+            background-color: #FFDDDD;
+        }
+        .positive {
+            background-color: #DDFFDD;
+        }
+        .neutral {
+<!--            background-color: #FFFFE0;-->
+        }
+    </style>
+</head>
+<body>
+
+
+<table>
+    <tr>
+            <th  th:text="#{page.parcels.text.id}">Id</th>
+            <th  th:text="#{page.parcels.text.area}">Area</th>
+            <th  th:text="#{page.parcels.text.balance}">Balance</th>
+    </tr>
+    <tbody th:each="parcel: ${parcels}">
+    <tr>
+        <td th:text="${parcel.id}"></td>
+        <td th:text="${parcel.size}"></td>
+        <td th:text="${parcel.balance.sum}"></td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>
