@@ -8,6 +8,7 @@
           border: 1px solid black;
           border-collapse: collapse;
           padding: 3px;
+          margin-bottom: 30px;
         }
         .negative {
             background-color: #FFDDDD;
@@ -53,6 +54,13 @@
     </tr>
     </tbody>
 </table>
-</div>
+
+<form action="/payments" method="post">
+    <input type="number" name="amount">
+    <input type="hidden" name="id" th:value="${parcel.id}">
+    <input type="submit" th:value="#{page.text.add_payment}">
+</form>
+
+
 </body>
 </html>

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -70,6 +71,13 @@ class FinanceController {
             if (parcel.id.equals(id)) return parcel;
         }
         return null;
+    }
+
+    @PostMapping("/payments")
+    String showBalance(String id, BigDecimal amount) {
+        Parcel parcel = getParcelById(id);
+        parcel.addPayment(LocalDate.now(), new Payment(amount));
+        return "redirect:/parcels/" + id;
     }
 
 }
