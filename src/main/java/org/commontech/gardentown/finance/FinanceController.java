@@ -1,7 +1,6 @@
 package org.commontech.gardentown.finance;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -59,6 +59,7 @@ class FinanceController {
     @GetMapping("/parcels")
     String parcels(Model model) {
         model.addAttribute("parcels", garden.getParcels());
+        model.addAttribute("subaccounts", SubAccountType.values());
         return "parcels";
     }
 
@@ -86,7 +87,14 @@ class FinanceController {
 
     @PostMapping("/fees")
     String addFees(String id, HttpServletRequest request) {
-        Parcel parcel = getParcelById(id);
+        List<Parcel> parcels = id != null ? List.of(getParcelById(id)) : garden.getParcels();
+        for (Parcel parcel : parcels) {
+            addFeesToParcel(parcel, request);
+        }
+        return "redirect:/parcels";
+    }
+
+    private static void addFeesToParcel(Parcel parcel, HttpServletRequest request) {
         Map<String, String[]> parameterMap = request.getParameterMap();
         SubAccountType[] subAccountTypes = SubAccountType.values();
         Fee[] fees = new Fee[subAccountTypes.length];
@@ -95,7 +103,6 @@ class FinanceController {
             fees[i] = new Fee(type, new BigDecimal(parameterMap.get(type.name())[0]));
         }
         parcel.chargeFees(LocalDate.now(), new Fees(fees));
-        return "redirect:/parcels/" + id;
     }
 
 }
