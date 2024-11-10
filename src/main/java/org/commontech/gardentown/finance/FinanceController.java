@@ -1,5 +1,7 @@
 package org.commontech.gardentown.finance;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 @Controller
 class FinanceController {
@@ -75,9 +78,23 @@ class FinanceController {
     }
 
     @PostMapping("/payments")
-    String showBalance(String id, BigDecimal amount) {
+    String addPayment(String id, BigDecimal amount) {
         Parcel parcel = getParcelById(id);
         parcel.addPayment(LocalDate.now(), new Payment(amount));
+        return "redirect:/parcels/" + id;
+    }
+
+    @PostMapping("/fees")
+    String addFees(String id, HttpServletRequest request) {
+        Parcel parcel = getParcelById(id);
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        SubAccountType[] subAccountTypes = SubAccountType.values();
+        Fee[] fees = new Fee[subAccountTypes.length];
+        for (int i = 0; i < subAccountTypes.length; i++) {
+            SubAccountType type = subAccountTypes[i];
+            fees[i] = new Fee(type, new BigDecimal(parameterMap.get(type.name())[0]));
+        }
+        parcel.chargeFees(LocalDate.now(), new Fees(fees));
         return "redirect:/parcels/" + id;
     }
 

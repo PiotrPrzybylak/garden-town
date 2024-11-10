@@ -8,7 +8,6 @@
           border: 1px solid black;
           border-collapse: collapse;
           padding: 3px;
-          margin-bottom: 30px;
         }
         .negative {
             background-color: #FFDDDD;
@@ -19,12 +18,15 @@
         .neutral {
 <!--            background-color: #FFFFE0;-->
         }
+        form {
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
 
 <p><span th:text="#{page.text.parcel}">Parcel</span> : <span th:text="${parcel.id}"></span></p>
-<table style="border: ">
+<table>
     <tr>
         <th rowspan="2" th:text="#{page.text.date}">Date</th>
         <th rowspan="2" th:text="#{page.text.event}">Event</th>
@@ -59,6 +61,23 @@
     <input type="number" name="amount">
     <input type="hidden" name="id" th:value="${parcel.id}">
     <input type="submit" th:value="#{page.text.add_payment}">
+</form>
+
+<form action="/fees" method="post">
+
+    <table>
+        <tr>
+            <th th:colspan="${subaccounts.length}" th:text="#{page.text.fees}">Fees</th>
+        </tr>
+        <tr>
+            <th th:each="type: ${subaccounts}" th:text="#{subaccount.name.__${type}__}"></th>
+        </tr>
+        <tr style="background-color:#e9f7f6">
+            <td th:each="subaccount: ${subaccounts}"><input type="number" th:name="${subaccount}"/></td>
+        </tr>
+    </table>
+    <input type="hidden" name="id" th:value="${parcel.id}"/>
+    <input type="submit" th:value="#{page.text.add_fees}"/>
 </form>
 
 
