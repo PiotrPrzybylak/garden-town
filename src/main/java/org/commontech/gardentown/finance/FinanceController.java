@@ -100,7 +100,9 @@ class FinanceController {
         Fee[] fees = new Fee[subAccountTypes.length];
         for (int i = 0; i < subAccountTypes.length; i++) {
             SubAccountType type = subAccountTypes[i];
-            fees[i] = new Fee(type, new BigDecimal(parameterMap.get(type.name())[0]));
+            BigDecimal paramValue = new BigDecimal(parameterMap.get(type.name())[0]);
+            BigDecimal amount = (type == SubAccountType.GARDEN) ? paramValue.multiply(new BigDecimal(parcel.size)): paramValue;
+            fees[i] = new Fee(type, amount);
         }
         parcel.chargeFees(LocalDate.now(), new Fees(fees));
     }
