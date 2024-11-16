@@ -1,6 +1,7 @@
-package org.commontech.gardentown.finance;
+package org.commontech.gardentown.domain;
 
 import lombok.Getter;
+import org.commontech.gardentown.domain.finance.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;

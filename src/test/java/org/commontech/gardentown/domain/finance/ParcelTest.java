@@ -1,4 +1,4 @@
-package org.commontech.gardentown.finance;
+package org.commontech.gardentown.domain.finance;
 
 import org.junit.jupiter.api.Test;
 

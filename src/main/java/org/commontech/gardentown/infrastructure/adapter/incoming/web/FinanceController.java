@@ -1,6 +1,12 @@
-package org.commontech.gardentown.finance;
+package org.commontech.gardentown.infrastructure.adapter.incoming.web;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.commontech.gardentown.domain.finance.Fee;
+import org.commontech.gardentown.domain.finance.Fees;
+import org.commontech.gardentown.domain.Garden;
+import org.commontech.gardentown.domain.finance.Parcel;
+import org.commontech.gardentown.domain.finance.Payment;
+import org.commontech.gardentown.domain.finance.SubAccountType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

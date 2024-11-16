@@ -1,4 +1,4 @@
-package org.commontech.gardentown.finance;
+package org.commontech.gardentown.domain.finance;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

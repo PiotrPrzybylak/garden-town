@@ -1,4 +1,4 @@
-package org.commontech.gardentown.finance;
+package org.commontech.gardentown.domain.finance;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -7,12 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.commontech.gardentown.finance.Event.Type.FEES;
-import static org.commontech.gardentown.finance.Event.Type.PAYMENT;
-import static org.commontech.gardentown.finance.Event.Type.REBALANCE;
-import static org.commontech.gardentown.finance.Event.Type.START;
+import static org.commontech.gardentown.domain.finance.Event.Type.FEES;
+import static org.commontech.gardentown.domain.finance.Event.Type.PAYMENT;
+import static org.commontech.gardentown.domain.finance.Event.Type.REBALANCE;
+import static org.commontech.gardentown.domain.finance.Event.Type.START;
 
-class Parcel {
+public class Parcel {
 
     private LocalDate start;
     private List<SubAccount> subAccounts = new ArrayList<>();

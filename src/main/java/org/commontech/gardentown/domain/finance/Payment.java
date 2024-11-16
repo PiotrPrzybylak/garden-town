@@ -1,9 +1,9 @@
-package org.commontech.gardentown.finance;
+package org.commontech.gardentown.domain.finance;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-record Payment(BigDecimal amount) {
+public record Payment(BigDecimal amount) {
 
     BookingProposal proposeBooking(Parcel parcel) {
 

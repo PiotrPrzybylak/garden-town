@@ -1,4 +1,4 @@
-package org.commontech.gardentown.finance;
+package org.commontech.gardentown.domain.finance;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @ToString
 @EqualsAndHashCode
 @Getter
-class SubAccount {
+public class SubAccount {
     SubAccountType type;
     BigDecimal amount;
 
