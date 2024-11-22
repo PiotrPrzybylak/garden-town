@@ -1,9 +1,9 @@
 package org.commontech.gardentown.infrastructure.adapter.incoming.web;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.commontech.gardentown.domain.Garden;
 import org.commontech.gardentown.domain.finance.Fee;
 import org.commontech.gardentown.domain.finance.Fees;
-import org.commontech.gardentown.domain.Garden;
 import org.commontech.gardentown.domain.finance.Parcel;
 import org.commontech.gardentown.domain.finance.Payment;
 import org.commontech.gardentown.domain.finance.SubAccountType;
@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -107,10 +109,22 @@ class FinanceController {
         for (int i = 0; i < subAccountTypes.length; i++) {
             SubAccountType type = subAccountTypes[i];
             BigDecimal paramValue = new BigDecimal(parameterMap.get(type.name())[0]);
-            BigDecimal amount = (type == SubAccountType.GARDEN) ? paramValue.multiply(new BigDecimal(parcel.size)): paramValue;
+            BigDecimal amount = (type == SubAccountType.GARDEN) ? paramValue.multiply(new BigDecimal(parcel.size)) : paramValue;
             fees[i] = new Fee(type, amount);
         }
         parcel.chargeFees(LocalDate.now(), new Fees(fees));
+    }
+
+    @GetMapping("/upload")
+    void upload() {
+    }
+
+    @PostMapping("/upload")
+    String upload(@RequestParam("file") MultipartFile file) {
+
+        System.out.println(file);
+
+        return "redirect:/parcels";
     }
 
 }
