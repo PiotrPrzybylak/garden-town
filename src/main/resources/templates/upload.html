@@ -6,7 +6,7 @@
 	</div>
 
 	<div>
-		<form method="POST" enctype="multipart/form-data">
+		<form method="POST" enctype="multipart/form-data" th:action="@{/upload}">
 			<table>
 				<tr><td th:text="#{page.text.file}">File to upload:</td><td><input type="file" name="file" /></td></tr>
 				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
