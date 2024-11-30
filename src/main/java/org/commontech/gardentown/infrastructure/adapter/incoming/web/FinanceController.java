@@ -43,8 +43,12 @@ class FinanceController {
 
     FinanceController() {
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-1", LocalDate.now(), 200));
+        garden.getLeases().put("I-1", new Lease(new Holder("John", "Smith", "", "", ""), Optional.empty()));
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-2", LocalDate.now(), 255));
+        garden.getLeases().put("I-2", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "IV-5a", LocalDate.now(), 302));
+        garden.getLeases().put("IV-5a", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
+
 
         Parcel parcel = new Parcel(UUID.randomUUID(), "II-111", LocalDate.parse("2024-01-01"), 255);
         parcel.chargeFees(LocalDate.parse("2024-01-02"), new Fees(
@@ -68,19 +72,10 @@ class FinanceController {
                 new Fee(SubAccountType.WATER_USAGE, new BigDecimal("10.51"))
         ));
         garden.getParcels().add(parcel);
+        garden.getLeases().put("II-111", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
     }
 
-    @GetMapping("/")
-    String showBalance(Model model) {
-        Parcel parcel = garden.getParcels().get(3);
-        model.addAttribute("parcel", parcel);
-        model.addAttribute("subaccounts", SubAccountType.values());
-
-        return "balance";
-    }
-
-
-    @GetMapping("/parcels")
+    @GetMapping({"/parcels", "/"})
     String parcels(Model model) {
         List<Parcel> parcels = garden.getParcels();
         parcels.sort(Comparator.comparing(o -> o.number));
