@@ -12,8 +12,8 @@ import java.util.UUID;
 
 @Getter
 public class Garden {
-    private List<Parcel> parcels = new ArrayList<>();
-    private Map<String, Lease> leases = new HashMap<>();
+    private final List<Parcel> parcels = new ArrayList<>();
+    private final Map<String, Lease> leases = new HashMap<>();
 
     public Parcel getParcelById(UUID id) {
         for (Parcel parcel : getParcels()) {

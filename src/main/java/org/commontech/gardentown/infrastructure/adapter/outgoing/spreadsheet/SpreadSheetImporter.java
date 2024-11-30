@@ -46,7 +46,7 @@ public class SpreadSheetImporter {
                     return;
                 }
                 if (balance.compareTo(BigDecimal.ZERO) < 0) {
-                    parcel.chargeFees(LocalDate.now(), new Fees(new Fee(SubAccountType.OTHER, balance)));
+                    parcel.chargeFees(LocalDate.now(), new Fees(new Fee(SubAccountType.OTHER, balance.negate())));
                 }
                 if (balance.compareTo(BigDecimal.ZERO) > 0) {
                     parcel.addPayment(LocalDate.now(), new Payment(balance));
