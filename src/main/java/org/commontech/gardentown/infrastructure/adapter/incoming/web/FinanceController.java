@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,9 @@ class FinanceController {
 
     @GetMapping("/parcels")
     String parcels(Model model) {
-        model.addAttribute("parcels", garden.getParcels());
+        List<Parcel> parcels = garden.getParcels();
+        parcels.sort(Comparator.comparing(o -> o.number));
+        model.addAttribute("parcels", parcels);
         model.addAttribute("subaccounts", SubAccountType.values());
         return "parcels";
     }
