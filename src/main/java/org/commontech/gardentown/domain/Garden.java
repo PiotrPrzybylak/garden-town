@@ -8,9 +8,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Getter
 public class Garden {
     private List<Parcel> parcels = new ArrayList<>();
     private Map<String, Lease> leases = new HashMap<>();
+
+    public Parcel getParcelById(UUID id) {
+        for (Parcel parcel : getParcels()) {
+            if (parcel.id.equals(id)) return parcel;
+        }
+        return null;
+    }
+
+    public Parcel getParcelByNumber(String number) {
+        for (Parcel parcel : getParcels()) {
+            if (parcel.number.equals(number)) return parcel;
+        }
+        return null;
+    }
 }

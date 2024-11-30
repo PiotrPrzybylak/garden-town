@@ -82,30 +82,23 @@ class FinanceController {
 
     @GetMapping("/parcels/{id}")
     String parcel(@PathVariable UUID id, Model model) {
-        Parcel parcel = getParcelById(id);
+        Parcel parcel = garden.getParcelById(id);
         model.addAttribute("parcel", parcel);
         model.addAttribute("subaccounts", SubAccountType.values());
         model.addAttribute("lease", garden.getLeases().get(parcel.number));
         return "balance";
     }
 
-    private Parcel getParcelById(UUID id) {
-        for (Parcel parcel : garden.getParcels()) {
-            if (parcel.id.equals(id)) return parcel;
-        }
-        return null;
-    }
-
     @PostMapping("/payments")
     String addPayment(UUID id, BigDecimal amount) {
-        Parcel parcel = getParcelById(id);
+        Parcel parcel = garden.getParcelById(id);
         parcel.addPayment(LocalDate.now(), new Payment(amount));
         return "redirect:/parcels/" + id;
     }
 
     @PostMapping("/fees")
     String addFees(UUID id, HttpServletRequest request) {
-        List<Parcel> parcels = id != null ? List.of(getParcelById(id)) : garden.getParcels();
+        List<Parcel> parcels = id != null ? List.of(garden.getParcelById(id)) : garden.getParcels();
         for (Parcel parcel : parcels) {
             addFeesToParcel(parcel, request);
         }
