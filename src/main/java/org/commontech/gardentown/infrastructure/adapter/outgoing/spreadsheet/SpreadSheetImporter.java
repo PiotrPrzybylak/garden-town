@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class SpreadSheetImporter {
             }
 
             String number = cellWithNumber.getStringCellValue();
-            balances.put(number, new BigDecimal(balance.getNumericCellValue()));
+            balances.put(number, BigDecimal.valueOf(balance.getNumericCellValue()).setScale(2, RoundingMode.HALF_EVEN));
             log.info("Balance for parcel {} : {}.", number, balances.get(number));
         }
 
