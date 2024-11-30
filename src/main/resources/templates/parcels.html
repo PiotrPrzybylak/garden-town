@@ -19,12 +19,14 @@
 
 <table>
     <tr>
+            <th></th>
             <th  th:text="#{page.parcels.text.id}">Id</th>
             <th  th:text="#{page.parcels.text.area}">Area</th>
             <th  th:text="#{page.parcels.text.balance}">Balance</th>
     </tr>
     <tbody th:each="parcel: ${parcels}">
     <tr>
+        <td th:text="${parcelStat.count}"></td>
         <td><a th:text="${parcel.number}" th:href="${'/parcels/' + parcel.id}"></a></td>
         <td th:text="${parcel.size}"></td>
         <td th:text="${parcel.balance.sum}"></td>
