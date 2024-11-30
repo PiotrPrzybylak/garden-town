@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -11,6 +12,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.commontech.gardentown.domain.Garden;
 import org.commontech.gardentown.domain.finance.Fee;
 import org.commontech.gardentown.domain.finance.Fees;
+import org.commontech.gardentown.domain.finance.Holder;
+import org.commontech.gardentown.domain.finance.Lease;
 import org.commontech.gardentown.domain.finance.Parcel;
 import org.commontech.gardentown.domain.finance.Payment;
 import org.commontech.gardentown.domain.finance.SubAccountType;
@@ -29,6 +32,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -38,7 +42,7 @@ class FinanceController {
     private final Garden garden = new Garden();
 
     FinanceController() {
-        garden.getParcels().add(new Parcel(UUID.randomUUID(),"I-1", LocalDate.now(), 200));
+        garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-1", LocalDate.now(), 200));
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-2", LocalDate.now(), 255));
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "IV-5a", LocalDate.now(), 302));
 
@@ -90,6 +94,7 @@ class FinanceController {
         Parcel parcel = getParcelById(id);
         model.addAttribute("parcel", parcel);
         model.addAttribute("subaccounts", SubAccountType.values());
+        model.addAttribute("lease", garden.getLeases().get(parcel.number));
         return "balance";
     }
 
@@ -138,20 +143,32 @@ class FinanceController {
 
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
 
-        Sheet rentersData = workbook.getSheetAt(4);
-        Map<String, String> renters = new HashMap<>();
+        Sheet leasesData = workbook.getSheetAt(4);
         int nullRenterCounter = 0;
-        for (Row renter : rentersData) {
-            Cell cell = renter.getCell(0);
-            if (cell == null) {
+        int totalRenterCounter = 0;
+        for (Row lease : leasesData) {
+            totalRenterCounter++;
+            Cell cellWithNumber = lease.getCell(0);
+            log.info("READING row {} cell 0: {}", totalRenterCounter, cellWithNumber);
+            if (cellWithNumber == null) {
                 nullRenterCounter++;
                 continue;
             }
-            String number = cell.getStringCellValue();
-            renters.put(number, renter.getCell(2).getStringCellValue());
+            if (cellWithNumber.getRowIndex() == 0) {
+                continue;
+            }
+
+            DataFormatter dataFormatter = new DataFormatter();
+            String number = cellWithNumber.getStringCellValue();
+            String holderFirstName = lease.getCell(2).getStringCellValue();
+            String holderLastName = lease.getCell(3).getStringCellValue();
+            String holderPESEL = dataFormatter.formatCellValue(lease.getCell(4));
+            String holderPhone = Integer.valueOf((int) lease.getCell(5).getNumericCellValue()).toString();
+            String holderEmail = lease.getCell(6).getStringCellValue();
+            garden.getLeases().putIfAbsent(number, new Lease(new Holder(holderFirstName, holderLastName, holderPESEL, holderPhone, holderEmail), Optional.empty()));
         }
         log.info("Null renters found: {}.", nullRenterCounter);
-        log.info("Renters found: {}.", renters.size());
+        log.info("Renters found: {}.", garden.getLeases().size());
 
 
         Sheet parcelsData = workbook.getSheetAt(34);
@@ -159,7 +176,7 @@ class FinanceController {
         int nullParcelCounter = 0;
         for (Row parcel : parcelsData) {
             Cell area = parcel.getCell(2);
-            if (area == null)  {
+            if (area == null) {
                 nullParcelCounter++;
                 continue;
             }
@@ -173,11 +190,11 @@ class FinanceController {
         log.info("Parcels found: {}.", parcels.size());
 
         parcels.forEach((number, area) -> {
-                    String renterLastName = renters.get(number);
-                    if (renterLastName == null) {
+                    Lease lease = garden.getLeases().get(number);
+                    if (lease == null) {
                         log.error("Renter not found for parcel: {}", number);
                     }
-                    log.info("Importing parcel {} with renter: {}.", number, renterLastName);
+                    log.info("Importing parcel {} with renter: {}.", number, lease.holder);
                     garden.getParcels().add(new Parcel(UUID.randomUUID(), number, LocalDate.now(), area));
 
                 }
