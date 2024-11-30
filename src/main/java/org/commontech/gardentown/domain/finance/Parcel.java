@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.commontech.gardentown.domain.finance.Event.Type.FEES;
 import static org.commontech.gardentown.domain.finance.Event.Type.PAYMENT;
@@ -14,15 +15,17 @@ import static org.commontech.gardentown.domain.finance.Event.Type.START;
 
 public class Parcel {
 
+    public final String number;
     private LocalDate start;
     private List<SubAccount> subAccounts = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
     BigDecimal excessPayment = BigDecimal.ZERO;
-    public String id;
+    public UUID id;
     public int size;
 
-    public Parcel(String id, LocalDate start, int size) {
+    public Parcel(UUID id, String number, LocalDate start, int size) {
         this.id = id;
+        this.number = number;
         this.start = start;
         this.size = size;
         for (SubAccountType type : SubAccountType.values()) {
