@@ -9,7 +9,7 @@
 		<form method="POST" enctype="multipart/form-data" th:action="@{/upload}">
 			<table>
 				<tr><td th:text="#{page.text.file}">File to upload:</td><td><input type="file" name="file" /></td></tr>
-				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+				<tr><td></td><td><input type="submit" value="Import data" th:value="#{page.text.import_data}"/></td></tr>
 			</table>
 		</form>
 	</div>
