@@ -1,0 +1,15 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<body>
+
+	<div th:if="${message}">
+		<h2 th:text="${message}"/>
+	</div>
+
+	<div>
+		<form method="POST" th:action="@{/delete_all}">
+			<button th:text="#{page.text.delete_all}">Delete all data</button>
+		</form>
+	</div>
+
+</body>
+</html>

@@ -14,6 +14,7 @@ import org.commontech.gardentown.infrastructure.adapter.outgoing.spreadsheet.Spr
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -129,5 +130,17 @@ class FinanceController {
         }
         return "redirect:/parcels";
     }
+
+
+    @GetMapping("/delete_all")
+    void deleteAllForm()  {
+    }
+
+    @PostMapping("/delete_all")
+    String deleteAll()  {
+        garden.clean();
+        return "redirect:/";
+    }
+
 
 }

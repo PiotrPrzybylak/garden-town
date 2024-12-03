@@ -28,4 +28,9 @@ public class Garden {
         }
         return null;
     }
+
+    public void clean() {
+        parcels.clear();
+        leases.clear();
+    }
 }
