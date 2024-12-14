@@ -47,7 +47,9 @@
             <td th:each="subaccount: ${subaccounts}"><input type="number" value="0" th:name="${subaccount}"/>&nbsp;<span th:text="${subaccount.name() eq 'GARDEN' ? 'PLN/m2' : 'PLN'}">PLN</span></td>
         </tr>
     </table>
+
     <input type="submit" th:value="#{page.text.add_fees}"/>
+
 </form>
 
 <a th:href="@{/delete_all}" th:text="#{page.text.delete_all}">Delete all data</a> |
