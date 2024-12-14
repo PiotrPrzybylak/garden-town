@@ -58,10 +58,30 @@
     </tbody>
 </table>
 
-<form th:action="@{/payments}" method="post">
+<form method="get" th:if="${param.amount == null}">
     <input type="number" name="amount">
-    <input type="hidden" name="id" th:value="${parcel.id}">
     <input type="submit" th:value="#{page.text.add_payment}">
+</form>
+
+<form th:action="@{/payments}" method="post" th:if="${param.amount != null}">
+
+    <table>
+        <tr>
+            <th th:colspan="${subaccounts.length}" th:text="#{page.text.fees}">Fees</th>
+        </tr>
+        <tr>
+            <th th:each="type: ${subaccounts}" th:text="#{subaccount.name.__${type}__}"></th>
+        </tr>
+        <tr>
+            <td th:each="subaccount: ${subaccounts}"><input type="number" th:value="${subpayments.get(subaccount)}" th:name="${subaccount}"/>&nbsp;<span>PLN</span></td>
+            <td><input type="number" th:value="${excess}" th:name="excess"/>&nbsp;<span>PLN</span></td>
+        </tr>
+    </table>
+
+    <input type="hidden" name="id" th:value="${parcel.id}"/>
+
+    <input type="submit" th:value="#{page.text.add_payment}">
+
 </form>
 
 <form th:action="@{/fees}" method="post">

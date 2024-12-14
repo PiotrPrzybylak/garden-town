@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 record Event(Type type, LocalDate date, Operation operation, Balance balance, Event previous) {
-    public enum Type {START, FEES, PAYMENT, REBALANCE}
+    public enum Type {START, FEES, PAYMENT, REBALANCE, MANUAL_PAYMENT}
 
     public Balance diff() {
         List<SubAccount> subAccounts = new ArrayList<>();

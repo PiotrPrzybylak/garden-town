@@ -5,7 +5,7 @@ import java.util.List;
 
 public record Payment(BigDecimal amount) {
 
-    BookingProposal proposeBooking(Parcel parcel) {
+    public BookingProposal proposeBooking(Parcel parcel) {
 
         BigDecimal total = amount;
 

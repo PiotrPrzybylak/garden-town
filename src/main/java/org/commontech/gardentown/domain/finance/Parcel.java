@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.commontech.gardentown.domain.finance.Event.Type.FEES;
+import static org.commontech.gardentown.domain.finance.Event.Type.MANUAL_PAYMENT;
 import static org.commontech.gardentown.domain.finance.Event.Type.PAYMENT;
 import static org.commontech.gardentown.domain.finance.Event.Type.REBALANCE;
 import static org.commontech.gardentown.domain.finance.Event.Type.START;
@@ -103,4 +104,11 @@ public class Parcel {
     public List<Event> getEvents() {
         return events;
     }
+
+    public void addPayment(LocalDate date, BookingProposal bookingProposal) {
+        bookingProposal.subPayments.forEach(this::addSubPayment);
+        excessPayment = bookingProposal.excess;
+        events.add(new Event(MANUAL_PAYMENT, date, null, getBalance(), events.getLast()));
+    }
+
 }
