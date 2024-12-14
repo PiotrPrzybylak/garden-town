@@ -41,6 +41,9 @@ public class Parcel {
 
     public void chargeFee(SubAccountType subAccountType, BigDecimal amount) {
         SubAccount subAccount = getSubAccount(subAccountType);
+        if (subAccountType == SubAccountType.GARDEN) {
+            amount = amount.multiply(new BigDecimal(size));
+        }
         subAccount.chargeFee(amount);
     }
 

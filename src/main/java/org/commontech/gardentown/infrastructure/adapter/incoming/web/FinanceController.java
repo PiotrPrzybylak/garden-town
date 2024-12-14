@@ -12,7 +12,9 @@ import org.commontech.gardentown.domain.finance.Parcel;
 import org.commontech.gardentown.domain.finance.Payment;
 import org.commontech.gardentown.domain.finance.SubAccountType;
 import org.commontech.gardentown.domain.finance.SubPayment;
+import org.commontech.gardentown.infrastructure.adapter.outgoing.persistence.InMemoryGarden;
 import org.commontech.gardentown.infrastructure.adapter.outgoing.spreadsheet.SpreadSheetImporter;
+import org.commontech.gardentown.port.incoming.ChargeFeesUseCase;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -39,10 +41,13 @@ import java.util.UUID;
 class FinanceController {
 
     private final SpreadSheetImporter spreadSheetImporter;
-    private final Garden garden = new Garden();
+    private final Garden garden;
+    private final ChargeFeesUseCase chargeFeesUseCase;
 
-    FinanceController(SpreadSheetImporter spreadSheetImporter) {
+    FinanceController(SpreadSheetImporter spreadSheetImporter, InMemoryGarden inMemoryGarden, ChargeFeesUseCase chargeFeesUseCase) {
         this.spreadSheetImporter = spreadSheetImporter;
+        this.garden = inMemoryGarden.garden;
+        this.chargeFeesUseCase = chargeFeesUseCase;
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-1", LocalDate.now(), 200));
         garden.getLeases().put("I-1", new Lease(new Holder("John", "Smith", "", "", ""), Optional.empty()));
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-2", LocalDate.now(), 255));
@@ -115,22 +120,21 @@ class FinanceController {
     String addFees(UUID id, HttpServletRequest request) {
         List<Parcel> parcels = id != null ? List.of(garden.getParcelById(id)) : garden.getParcels();
         for (Parcel parcel : parcels) {
-            addFeesToParcel(parcel, request);
+            chargeFeesUseCase.apply(parcel.id, getFees(request));
         }
         return "redirect:/parcels";
     }
 
-    private static void addFeesToParcel(Parcel parcel, HttpServletRequest request) {
+    private static Fees getFees(HttpServletRequest request) {
         Map<String, String[]> parameterMap = request.getParameterMap();
         SubAccountType[] subAccountTypes = SubAccountType.values();
         Fee[] fees = new Fee[subAccountTypes.length];
         for (int i = 0; i < subAccountTypes.length; i++) {
             SubAccountType type = subAccountTypes[i];
-            BigDecimal paramValue = new BigDecimal(parameterMap.get(type.name())[0]);
-            BigDecimal amount = (type == SubAccountType.GARDEN) ? paramValue.multiply(new BigDecimal(parcel.size)) : paramValue;
+            BigDecimal amount = new BigDecimal(parameterMap.get(type.name())[0]);
             fees[i] = new Fee(type, amount);
         }
-        parcel.chargeFees(LocalDate.now(), new Fees(fees));
+        return new Fees(fees);
     }
 
     private static void addPaymentToParcel(Parcel parcel, HttpServletRequest request) {
