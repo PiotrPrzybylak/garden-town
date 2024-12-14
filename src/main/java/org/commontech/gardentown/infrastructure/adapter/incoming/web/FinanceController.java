@@ -15,6 +15,7 @@ import org.commontech.gardentown.domain.finance.SubPayment;
 import org.commontech.gardentown.infrastructure.adapter.outgoing.persistence.InMemoryGarden;
 import org.commontech.gardentown.infrastructure.adapter.outgoing.spreadsheet.SpreadSheetImporter;
 import org.commontech.gardentown.port.incoming.ChargeFeesUseCase;
+import org.commontech.gardentown.port.incoming.ParcelsView;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -43,11 +44,13 @@ class FinanceController {
     private final SpreadSheetImporter spreadSheetImporter;
     private final Garden garden;
     private final ChargeFeesUseCase chargeFeesUseCase;
+    private final ParcelsView parcelsView;
 
-    FinanceController(SpreadSheetImporter spreadSheetImporter, InMemoryGarden inMemoryGarden, ChargeFeesUseCase chargeFeesUseCase) {
+    FinanceController(SpreadSheetImporter spreadSheetImporter, InMemoryGarden inMemoryGarden, ChargeFeesUseCase chargeFeesUseCase, ParcelsView parcelsView) {
         this.spreadSheetImporter = spreadSheetImporter;
         this.garden = inMemoryGarden.garden;
         this.chargeFeesUseCase = chargeFeesUseCase;
+        this.parcelsView = parcelsView;
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-1", LocalDate.now(), 200));
         garden.getLeases().put("I-1", new Lease(new Holder("John", "Smith", "", "", ""), Optional.empty()));
         garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-2", LocalDate.now(), 255));
@@ -83,7 +86,7 @@ class FinanceController {
 
     @GetMapping({"/parcels", "/"})
     String parcels(Model model) {
-        List<Parcel> parcels = garden.getParcels();
+        List<Parcel> parcels = parcelsView.get();
         parcels.sort(Comparator.comparing(o -> o.number));
         model.addAttribute("parcels", parcels);
         model.addAttribute("subaccounts", SubAccountType.values());
