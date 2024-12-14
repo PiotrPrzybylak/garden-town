@@ -12,7 +12,7 @@ class ParcelTest {
 
     @Test
     void test() {
-        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
+        Parcel parcel = new ParcelBuilder().build();
 
         List<Event> history = parcel.history();
 
@@ -24,7 +24,15 @@ class ParcelTest {
                         new SubAccount(SubAccountType.ELECTRICITY_LOSS, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.WATER_USAGE, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.WATER_LOSS, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.WATER_LUMP_SUM, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.TRASH, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.INVESTMENT_MULTIYEAR, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.ENTRY, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.INVESTMENT_FOR_NEW_RENTERS, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.INTEREST, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.POSTSTAMPS, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.ELECTRICITY_INSTALLATION, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.LEGAL, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
                 ),
                         BigDecimal.ZERO
@@ -36,7 +44,7 @@ class ParcelTest {
 
     @Test
     void test2() {
-        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
+        Parcel parcel = new ParcelBuilder().build();
 
         Fees fees = new Fees(
 
@@ -63,7 +71,15 @@ class ParcelTest {
                         new SubAccount(SubAccountType.ELECTRICITY_LOSS, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.WATER_USAGE, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.WATER_LOSS, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.WATER_LUMP_SUM, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.TRASH, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.INVESTMENT_MULTIYEAR, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.ENTRY, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.INVESTMENT_FOR_NEW_RENTERS, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.INTEREST, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.POSTSTAMPS, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.ELECTRICITY_INSTALLATION, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.LEGAL, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
                 ),
                         BigDecimal.ZERO
@@ -78,7 +94,15 @@ class ParcelTest {
                         new SubAccount(SubAccountType.ELECTRICITY_LOSS, new BigDecimal("-30")),
                         new SubAccount(SubAccountType.WATER_USAGE, new BigDecimal("0")),
                         new SubAccount(SubAccountType.WATER_LOSS, new BigDecimal("-25")),
+                        new SubAccount(SubAccountType.WATER_LUMP_SUM, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.TRASH, new BigDecimal("-350")),
+                        new SubAccount(SubAccountType.INVESTMENT_MULTIYEAR, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.ENTRY, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.INVESTMENT_FOR_NEW_RENTERS, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.INTEREST, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.POSTSTAMPS, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.ELECTRICITY_INSTALLATION, BigDecimal.ZERO),
+                        new SubAccount(SubAccountType.LEGAL, BigDecimal.ZERO),
                         new SubAccount(SubAccountType.OTHER, BigDecimal.ZERO)
                 ),
                         BigDecimal.ZERO
@@ -94,7 +118,7 @@ class ParcelTest {
 
     @Test
     void test3() {
-        Parcel parcel = new Parcel("1", LocalDate.parse("2024-01-01"), 100);
+        Parcel parcel = new ParcelBuilder().build();
 
         Fees fees = new Fees(
 

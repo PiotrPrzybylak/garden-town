@@ -56,7 +56,7 @@ public class InMemoryGarden implements Garden {
 
 
     @Override
-    public Parcel geParcelById(UUID id) {
+    public Parcel getParcelById(UUID id) {
         return garden.getParcelById(id);
     }
 }

@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface Garden {
 
-    Parcel geParcelById(UUID id);
+    Parcel getParcelById(UUID id);
 }

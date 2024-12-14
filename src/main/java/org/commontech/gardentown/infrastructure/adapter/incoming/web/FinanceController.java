@@ -12,6 +12,7 @@ import org.commontech.gardentown.domain.finance.SubAccountType;
 import org.commontech.gardentown.domain.finance.SubPayment;
 import org.commontech.gardentown.infrastructure.adapter.outgoing.persistence.InMemoryGarden;
 import org.commontech.gardentown.infrastructure.adapter.outgoing.spreadsheet.SpreadSheetImporter;
+import org.commontech.gardentown.port.incoming.BookPaymentUseCase;
 import org.commontech.gardentown.port.incoming.ChargeFeesUseCase;
 import org.commontech.gardentown.port.incoming.ParcelsView;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -42,12 +42,14 @@ class FinanceController {
     private final Garden garden;
     private final ChargeFeesUseCase chargeFeesUseCase;
     private final ParcelsView parcelsView;
+    private final BookPaymentUseCase bookPaymentUseCase;
 
-    FinanceController(SpreadSheetImporter spreadSheetImporter, InMemoryGarden inMemoryGarden, ChargeFeesUseCase chargeFeesUseCase, ParcelsView parcelsView) {
+    FinanceController(SpreadSheetImporter spreadSheetImporter, InMemoryGarden inMemoryGarden, ChargeFeesUseCase chargeFeesUseCase, ParcelsView parcelsView, BookPaymentUseCase bookPaymentUseCase) {
         this.spreadSheetImporter = spreadSheetImporter;
         this.garden = inMemoryGarden.garden;
         this.chargeFeesUseCase = chargeFeesUseCase;
         this.parcelsView = parcelsView;
+        this.bookPaymentUseCase = bookPaymentUseCase;
     }
 
     @GetMapping({"/parcels", "/"})
@@ -80,8 +82,7 @@ class FinanceController {
 
     @PostMapping("/payments")
     String addPayment(UUID id, HttpServletRequest request) {
-        Parcel parcel = garden.getParcelById(id);
-        addPaymentToParcel(parcel, request);
+        bookPaymentUseCase.apply(id, getBookingProposal(request));
         return "redirect:/parcels/" + id;
     }
 
@@ -106,7 +107,7 @@ class FinanceController {
         return new Fees(fees);
     }
 
-    private static void addPaymentToParcel(Parcel parcel, HttpServletRequest request) {
+    private static BookingProposal getBookingProposal(HttpServletRequest request) {
         Map<String, String[]> parameterMap = request.getParameterMap();
         SubAccountType[] subAccountTypes = SubAccountType.values();
         List<SubPayment> subPayments = new ArrayList<>();
@@ -121,7 +122,7 @@ class FinanceController {
         BookingProposal bookingProposal = new BookingProposal();
         bookingProposal.subPayments = subPayments;
         bookingProposal.excess = new BigDecimal(parameterMap.get("excess")[0]);
-        parcel.addPayment(LocalDate.now(), bookingProposal);
+        return bookingProposal;
     }
 
     @GetMapping("/upload")
