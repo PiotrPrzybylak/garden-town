@@ -14,6 +14,7 @@ import org.commontech.gardentown.infrastructure.adapter.outgoing.persistence.InM
 import org.commontech.gardentown.infrastructure.adapter.outgoing.spreadsheet.SpreadSheetImporter;
 import org.commontech.gardentown.port.incoming.BookPaymentUseCase;
 import org.commontech.gardentown.port.incoming.ChargeFeesUseCase;
+import org.commontech.gardentown.port.incoming.ParcelDetailsView;
 import org.commontech.gardentown.port.incoming.ParcelsView;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,13 +44,20 @@ class FinanceController {
     private final ChargeFeesUseCase chargeFeesUseCase;
     private final ParcelsView parcelsView;
     private final BookPaymentUseCase bookPaymentUseCase;
+    private final ParcelDetailsView parcelDetailsView;
 
-    FinanceController(SpreadSheetImporter spreadSheetImporter, InMemoryGarden inMemoryGarden, ChargeFeesUseCase chargeFeesUseCase, ParcelsView parcelsView, BookPaymentUseCase bookPaymentUseCase) {
+    FinanceController(SpreadSheetImporter spreadSheetImporter,
+                      InMemoryGarden inMemoryGarden,
+                      ChargeFeesUseCase chargeFeesUseCase,
+                      ParcelsView parcelsView,
+                      BookPaymentUseCase bookPaymentUseCase,
+                      ParcelDetailsView parcelDetailsView) {
         this.spreadSheetImporter = spreadSheetImporter;
         this.garden = inMemoryGarden.garden;
         this.chargeFeesUseCase = chargeFeesUseCase;
         this.parcelsView = parcelsView;
         this.bookPaymentUseCase = bookPaymentUseCase;
+        this.parcelDetailsView = parcelDetailsView;
     }
 
     @GetMapping({"/parcels", "/"})
@@ -63,16 +71,15 @@ class FinanceController {
 
     @GetMapping("/parcels/{id}")
     String parcel(@PathVariable UUID id, Model model, BigDecimal amount) {
-        Parcel parcel = garden.getParcelById(id);
-        model.addAttribute("parcel", parcel);
+        ParcelDetailsView.ParcelDetails details = parcelDetailsView.get(id);
+        model.addAttribute("parcel", details.parcel());
         model.addAttribute("subaccounts", SubAccountType.values());
-        model.addAttribute("lease", garden.getLeases().get(parcel.number));
+        model.addAttribute("lease", details.lease());
 
         if (amount != null) {
-            BookingProposal bookingProposal = new Payment(amount).proposeBooking(parcel);
+            BookingProposal bookingProposal = new Payment(amount).proposeBooking(details.parcel());
             Map<SubAccountType, BigDecimal> subpayments = new HashMap<>();
             bookingProposal.subPayments.forEach(subPayment -> subpayments.put(subPayment.type(), subPayment.amount()));
-            System.out.println(subpayments);
             model.addAttribute("subpayments", subpayments);
             model.addAttribute("excess", bookingProposal.excess);
         }
