@@ -12,7 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,6 +64,11 @@ public class InMemoryGarden implements Garden {
     }
 
     @Override
+    public Parcel getParcelByNumber(String number) {
+        return garden.getParcelByNumber(number);
+    }
+
+    @Override
     public void delete() {
         garden.clean();
     }
@@ -69,5 +76,16 @@ public class InMemoryGarden implements Garden {
     @Override
     public List<UUID> getAllParcelIds() {
         return garden.getParcels().stream().map(p -> p.id).toList();
+    }
+
+    @Override
+    public void addParcels(Collection<Parcel> parcels) {
+        garden.getParcels().addAll(parcels);
+    }
+
+    @Override
+    public void addLeases(Map<String, Lease> leases) {
+        garden.getLeases().putAll(leases);
+
     }
 }

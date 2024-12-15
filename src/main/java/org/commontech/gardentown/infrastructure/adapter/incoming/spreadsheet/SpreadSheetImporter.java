@@ -1,4 +1,4 @@
-package org.commontech.gardentown.infrastructure.adapter.outgoing.spreadsheet;
+package org.commontech.gardentown.infrastructure.adapter.incoming.spreadsheet;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
@@ -8,14 +8,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.commontech.gardentown.domain.Garden;
-import org.commontech.gardentown.domain.finance.Fee;
-import org.commontech.gardentown.domain.finance.Fees;
 import org.commontech.gardentown.domain.finance.Holder;
 import org.commontech.gardentown.domain.finance.Lease;
 import org.commontech.gardentown.domain.finance.Parcel;
-import org.commontech.gardentown.domain.finance.Payment;
-import org.commontech.gardentown.domain.finance.SubAccountType;
+import org.commontech.gardentown.port.incoming.ImportGardenUseCase;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -30,28 +26,14 @@ import java.util.UUID;
 
 @Slf4j
 @Component
-public class SpreadSheetImporter {
+public record SpreadSheetImporter(ImportGardenUseCase importGardenUseCase) {
 
 
-    public void importFromSpreadSheet(InputStream inputStream, Garden garden) throws IOException {
+    public void importFromSpreadSheet(InputStream inputStream) throws IOException {
         try (Workbook workbook = new XSSFWorkbook(inputStream)) {
-            garden.getLeases().putAll(importLeases(workbook));
-            garden.getParcels().addAll(importParcels(workbook).values());
-            Map<String, BigDecimal> balances = importBalances(workbook);
-            System.out.println(balances);
-            balances.forEach((number, balance) -> {
-                Parcel parcel = garden.getParcelByNumber(number);
-                if (parcel == null) {
-                    log.error("No parcel found for number: {}.", number);
-                    return;
-                }
-                if (balance.compareTo(BigDecimal.ZERO) < 0) {
-                    parcel.chargeFees(LocalDate.now(), new Fees(new Fee(SubAccountType.OTHER, balance.negate())));
-                }
-                if (balance.compareTo(BigDecimal.ZERO) > 0) {
-                    parcel.addPayment(LocalDate.now(), new Payment(balance));
-                }
-            });
+            importGardenUseCase.importLeases(importLeases(workbook));
+            importGardenUseCase.importParcels(importParcels(workbook).values());
+            importBalances(workbook).forEach(importGardenUseCase::setInitialBalance);
         }
     }
 

@@ -2,7 +2,6 @@ package org.commontech.gardentown.infrastructure.adapter.incoming.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.commontech.gardentown.domain.Garden;
 import org.commontech.gardentown.domain.finance.BookingProposal;
 import org.commontech.gardentown.domain.finance.Fee;
 import org.commontech.gardentown.domain.finance.Fees;
@@ -10,8 +9,7 @@ import org.commontech.gardentown.domain.finance.Parcel;
 import org.commontech.gardentown.domain.finance.Payment;
 import org.commontech.gardentown.domain.finance.SubAccountType;
 import org.commontech.gardentown.domain.finance.SubPayment;
-import org.commontech.gardentown.infrastructure.adapter.outgoing.persistence.InMemoryGarden;
-import org.commontech.gardentown.infrastructure.adapter.outgoing.spreadsheet.SpreadSheetImporter;
+import org.commontech.gardentown.infrastructure.adapter.incoming.spreadsheet.SpreadSheetImporter;
 import org.commontech.gardentown.port.incoming.BookPaymentUseCase;
 import org.commontech.gardentown.port.incoming.ChargeFeesUseCase;
 import org.commontech.gardentown.port.incoming.DeleteGardenUseCase;
@@ -41,7 +39,6 @@ import java.util.UUID;
 class FinanceController {
 
     private final SpreadSheetImporter spreadSheetImporter;
-    private final Garden garden;
     private final ChargeFeesUseCase chargeFeesUseCase;
     private final ParcelsView parcelsView;
     private final BookPaymentUseCase bookPaymentUseCase;
@@ -49,14 +46,12 @@ class FinanceController {
     private final DeleteGardenUseCase deleteGardenUseCase;
 
     FinanceController(SpreadSheetImporter spreadSheetImporter,
-                      InMemoryGarden inMemoryGarden,
                       ChargeFeesUseCase chargeFeesUseCase,
                       ParcelsView parcelsView,
                       BookPaymentUseCase bookPaymentUseCase,
                       ParcelDetailsView parcelDetailsView,
                       DeleteGardenUseCase deleteGardenUseCase) {
         this.spreadSheetImporter = spreadSheetImporter;
-        this.garden = inMemoryGarden.garden;
         this.chargeFeesUseCase = chargeFeesUseCase;
         this.parcelsView = parcelsView;
         this.bookPaymentUseCase = bookPaymentUseCase;
@@ -123,8 +118,7 @@ class FinanceController {
         Map<String, String[]> parameterMap = request.getParameterMap();
         SubAccountType[] subAccountTypes = SubAccountType.values();
         List<SubPayment> subPayments = new ArrayList<>();
-        for (int i = 0; i < subAccountTypes.length; i++) {
-            SubAccountType type = subAccountTypes[i];
+        for (SubAccountType type : subAccountTypes) {
             String[] values = parameterMap.get(type.name());
             if (values.length > 0 && StringUtils.hasText(values[0])) {
                 BigDecimal amount = new BigDecimal(values[0]);
@@ -144,7 +138,7 @@ class FinanceController {
     @PostMapping("/upload")
     String upload(@RequestParam("file") MultipartFile file) throws IOException {
         try (InputStream inputStream = file.getInputStream()) {
-            spreadSheetImporter.importFromSpreadSheet(inputStream, garden);
+            spreadSheetImporter.importFromSpreadSheet(inputStream);
         }
         return "redirect:/parcels";
     }
