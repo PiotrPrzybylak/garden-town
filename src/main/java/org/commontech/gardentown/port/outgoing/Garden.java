@@ -21,4 +21,8 @@ public interface Garden {
     void addParcels(Collection<Parcel> parcels);
 
     void addLeases(Map<String, Lease> leases);
+
+    Lease getLeaseByNumber(String number);
+
+    List<Parcel> getParcels();
 }

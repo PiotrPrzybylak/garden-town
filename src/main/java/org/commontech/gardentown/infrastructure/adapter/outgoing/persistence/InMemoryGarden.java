@@ -12,7 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,15 +23,17 @@ import java.util.UUID;
 @Repository
 public class InMemoryGarden implements Garden {
 
-    public org.commontech.gardentown.domain.Garden garden = new org.commontech.gardentown.domain.Garden();
+    private final List<Parcel> parcels = new ArrayList<>();
+    private final Map<String, Lease> leases = new HashMap<>();
+
 
     public InMemoryGarden() {
-        garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-1", LocalDate.now(), 200));
-        garden.getLeases().put("I-1", new Lease(new Holder("John", "Smith", "", "", ""), Optional.empty()));
-        garden.getParcels().add(new Parcel(UUID.randomUUID(), "I-2", LocalDate.now(), 255));
-        garden.getLeases().put("I-2", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
-        garden.getParcels().add(new Parcel(UUID.randomUUID(), "IV-5a", LocalDate.now(), 302));
-        garden.getLeases().put("IV-5a", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
+        parcels.add(new Parcel(UUID.randomUUID(), "I-1", LocalDate.now(), 200));
+        leases.put("I-1", new Lease(new Holder("John", "Smith", "", "", ""), Optional.empty()));
+        parcels.add(new Parcel(UUID.randomUUID(), "I-2", LocalDate.now(), 255));
+        leases.put("I-2", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
+        parcels.add(new Parcel(UUID.randomUUID(), "IV-5a", LocalDate.now(), 302));
+        leases.put("IV-5a", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
 
 
         Parcel parcel = new Parcel(UUID.randomUUID(), "II-111", LocalDate.parse("2024-01-01"), 255);
@@ -53,39 +57,55 @@ public class InMemoryGarden implements Garden {
                 new Fee(SubAccountType.ELECTRICITY_USAGE, new BigDecimal("30")),
                 new Fee(SubAccountType.WATER_USAGE, new BigDecimal("10.51"))
         ));
-        garden.getParcels().add(parcel);
-        garden.getLeases().put("II-111", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
+        parcels.add(parcel);
+        leases.put("II-111", new Lease(new Holder("", "", "", "", ""), Optional.empty()));
     }
-
 
     @Override
     public Parcel getParcelById(UUID id) {
-        return garden.getParcelById(id);
+        for (Parcel parcel : parcels) {
+            if (parcel.id.equals(id)) return parcel;
+        }
+        return null;
     }
 
     @Override
     public Parcel getParcelByNumber(String number) {
-        return garden.getParcelByNumber(number);
+        for (Parcel parcel : parcels) {
+            if (parcel.number.equals(number)) return parcel;
+        }
+        return null;
     }
 
     @Override
     public void delete() {
-        garden.clean();
+        parcels.clear();
+        leases.clear();
     }
 
     @Override
     public List<UUID> getAllParcelIds() {
-        return garden.getParcels().stream().map(p -> p.id).toList();
+        return parcels.stream().map(p -> p.id).toList();
     }
 
     @Override
     public void addParcels(Collection<Parcel> parcels) {
-        garden.getParcels().addAll(parcels);
+        this.parcels.addAll(parcels);
     }
 
     @Override
     public void addLeases(Map<String, Lease> leases) {
-        garden.getLeases().putAll(leases);
+        this.leases.putAll(leases);
 
+    }
+
+    @Override
+    public Lease getLeaseByNumber(String number) {
+        return leases.get(number);
+    }
+
+    @Override
+    public List<Parcel> getParcels() {
+        return parcels;
     }
 }

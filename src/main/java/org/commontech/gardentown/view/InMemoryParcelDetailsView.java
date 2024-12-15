@@ -12,8 +12,8 @@ import java.util.UUID;
 record InMemoryParcelDetailsView(InMemoryGarden garden) implements ParcelDetailsView {
     @Override
     public ParcelDetails get(UUID id) {
-        Parcel parcel = garden.garden.getParcelById(id);
-        Lease lease = garden.garden.getLeases().get(parcel.number);
+        Parcel parcel = garden.getParcelById(id);
+        Lease lease = garden.getLeaseByNumber(parcel.number);
         return new ParcelDetails(parcel, lease);
     }
 }
