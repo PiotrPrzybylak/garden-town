@@ -99,9 +99,10 @@ class FinanceController {
 
     @PostMapping("/fees")
     String addFees(UUID id, HttpServletRequest request) {
-        List<Parcel> parcels = id != null ? List.of(garden.getParcelById(id)) : garden.getParcels();
-        for (Parcel parcel : parcels) {
-            chargeFeesUseCase.apply(parcel.id, getFees(request));
+        if (id != null) {
+            chargeFeesUseCase.chargeForParcel(id, getFees(request));
+        } else {
+            chargeFeesUseCase.chargeForAll(getFees(request));
         }
         return "redirect:/parcels";
     }

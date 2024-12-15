@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,5 +64,10 @@ public class InMemoryGarden implements Garden {
     @Override
     public void delete() {
         garden.clean();
+    }
+
+    @Override
+    public List<UUID> getAllParcelIds() {
+        return garden.getParcels().stream().map(p -> p.id).toList();
     }
 }
