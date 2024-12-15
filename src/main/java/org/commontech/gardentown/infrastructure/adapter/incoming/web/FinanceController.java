@@ -14,6 +14,7 @@ import org.commontech.gardentown.infrastructure.adapter.outgoing.persistence.InM
 import org.commontech.gardentown.infrastructure.adapter.outgoing.spreadsheet.SpreadSheetImporter;
 import org.commontech.gardentown.port.incoming.BookPaymentUseCase;
 import org.commontech.gardentown.port.incoming.ChargeFeesUseCase;
+import org.commontech.gardentown.port.incoming.DeleteGardenUseCase;
 import org.commontech.gardentown.port.incoming.ParcelDetailsView;
 import org.commontech.gardentown.port.incoming.ParcelsView;
 import org.springframework.stereotype.Controller;
@@ -45,19 +46,22 @@ class FinanceController {
     private final ParcelsView parcelsView;
     private final BookPaymentUseCase bookPaymentUseCase;
     private final ParcelDetailsView parcelDetailsView;
+    private final DeleteGardenUseCase deleteGardenUseCase;
 
     FinanceController(SpreadSheetImporter spreadSheetImporter,
                       InMemoryGarden inMemoryGarden,
                       ChargeFeesUseCase chargeFeesUseCase,
                       ParcelsView parcelsView,
                       BookPaymentUseCase bookPaymentUseCase,
-                      ParcelDetailsView parcelDetailsView) {
+                      ParcelDetailsView parcelDetailsView,
+                      DeleteGardenUseCase deleteGardenUseCase) {
         this.spreadSheetImporter = spreadSheetImporter;
         this.garden = inMemoryGarden.garden;
         this.chargeFeesUseCase = chargeFeesUseCase;
         this.parcelsView = parcelsView;
         this.bookPaymentUseCase = bookPaymentUseCase;
         this.parcelDetailsView = parcelDetailsView;
+        this.deleteGardenUseCase = deleteGardenUseCase;
     }
 
     @GetMapping({"/parcels", "/"})
@@ -151,7 +155,7 @@ class FinanceController {
 
     @PostMapping("/delete_all")
     String deleteAll() {
-        garden.clean();
+        deleteGardenUseCase.apply();
         return "redirect:/";
     }
 

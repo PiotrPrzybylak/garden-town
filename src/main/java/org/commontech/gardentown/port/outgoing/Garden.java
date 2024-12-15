@@ -7,4 +7,6 @@ import java.util.UUID;
 public interface Garden {
 
     Parcel getParcelById(UUID id);
+
+    void delete();
 }

@@ -59,4 +59,9 @@ public class InMemoryGarden implements Garden {
     public Parcel getParcelById(UUID id) {
         return garden.getParcelById(id);
     }
+
+    @Override
+    public void delete() {
+        garden.clean();
+    }
 }
